@@ -5,6 +5,8 @@ app_name = 'explorer'
 
 urlpatterns = [
     path('', views.galaxy, name='galaxy'),
+    path('globe/', views.globe, name='globe'),
+    path('timeline/', views.timeline, name='timeline'),
     path('explore/<slug:era_slug>/', views.era_overview, name='era_overview'),
     path('explore/<slug:era_slug>/period/<slug:period_slug>/', views.period_detail, name='period_detail'),
     path('explore/<slug:era_slug>/person/<slug:person_slug>/', views.person_detail, name='person_detail'),

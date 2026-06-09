@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Timeline — History Explorer{% endblock %}
+{% block meta_description %}Explore history across regions on one timeline — scrub a year to see what was happening everywhere at once.{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-timeline@7.7.3/styles/vis-timeline-graph2d.min.css">
+<style>
+  .tl-wrap { display: flex; gap: 1.25rem; align-items: flex-start; }
+  .tl-main { flex: 1 1 auto; min-width: 0; }
+  .tl-side { flex: 0 0 280px; }
+
+  .scrubber { display: flex; align-items: center; gap: 0.75rem; margin: 0.5rem 0 1rem; }
+  .scrubber input[type=range] { flex: 1; accent-color: var(--he-gold, #c9a84c); }
+  .scrub-year { font-family: 'Cinzel', serif; font-size: 1.5rem; color: var(--he-gold, #c9a84c);
+    min-width: 4ch; text-align: center; }
+
+  #region-timeline { border: 1px solid var(--he-border, #2a2f45); border-radius: 8px; }
+
+  /* Draggable scrub marker */
+  .vis-custom-time.scrub { background-color: var(--he-gold, #c9a84c); width: 2px; cursor: ew-resize; }
+  .vis-custom-time.scrub > .vis-custom-time-marker {
+    background-color: var(--he-gold, #c9a84c); color: #1a1206; font-weight: 600; }
+
+  .tl-side .panel-card { background: rgba(10,12,22,0.6); border: 1px solid var(--he-border,#2a2f45);
+    border-radius: 8px; padding: 1rem; position: sticky; top: 90px; }
+  .tl-side h3 { font-family: 'Cinzel', serif; font-size: 1rem; color: var(--he-gold,#c9a84c);
+    margin-bottom: 0.75rem; }
+  .active-region { margin-bottom: 0.85rem; }
+  .active-region .rgn { font-size: 0.72rem; letter-spacing: 0.07em; text-transform: uppercase;
+    color: #8a90a8; margin-bottom: 0.25rem; }
+  .active-item { display: block; font-size: 0.85rem; text-decoration: none; color: #d7dbe8;
+    padding: 0.15rem 0; border-left: 3px solid transparent; padding-left: 0.5rem; }
+  .active-item:hover { color: #fff; border-left-color: var(--he-gold,#c9a84c); }
+  .active-item .yr { color: #8a90a8; font-size: 0.75rem; }
+  .active-empty { color: #8a90a8; font-size: 0.85rem; }
+
+  .era-legend { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 0.5rem; }
+  .era-legend .leg { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; color: #c2c7d8; }
+  .era-legend .swatch { width: 12px; height: 12px; border-radius: 3px; }
+
+  @media (max-width: 900px) {
+    .tl-wrap { flex-direction: column; }
+    .tl-side { flex: 1 1 auto; width: 100%; }
+    .tl-side .panel-card { position: static; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="container mt-4">
+  {% include "explorer/_breadcrumb.html" %}
+  <h1 class="era-title mt-2">History Across Regions</h1>
+  <p class="text-muted">Each lane is a region; each bar an era. Drag the gold marker — or the slider — to a year to see what was happening everywhere at once.</p>
+
+  <div class="era-legend">
+    {% for era in eras %}
+    <span class="leg"><span class="swatch" style="background: {{ era.color_accent }}"></span>{{ era.name }}</span>
+    {% endfor %}
+  </div>
+
+  <div class="scrubber">
+    <input type="range" id="scrub-slider">
+    <span class="scrub-year" id="scrub-year">—</span>
+  </div>
+
+  <div class="tl-wrap">
+    <div class="tl-main">
+      <div id="region-timeline"></div>
+    </div>
+    <aside class="tl-side">
+      <div class="panel-card">
+        <h3>Active in <span id="panel-year">—</span></h3>
+        <div id="active-list"></div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<script id="timeline-data" type="application/json">{{ timeline_json|safe }}</script>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/vis-timeline@7.7.3/standalone/umd/vis-timeline-graph2d.min.js"></script>
+<script>
+(function () {
+  const raw = JSON.parse(document.getElementById('timeline-data').textContent);
+  const container = document.getElementById('region-timeline');
+  if (!container || !raw.items.length) return;
+
+  const items = new vis.DataSet(raw.items);
+  const groups = new vis.DataSet(raw.groups);
+
+  const years = raw.items.flatMap(i => [i.startYear, i.endYear]);
+  const minYear = Math.min(...years);
+  const maxYear = Math.max(...years);
+  let scrubYear = Math.round((minYear + maxYear) / 2);
+
+  const timeline = new vis.Timeline(container, items, groups, {
+    stack: true,
+    groupOrder: 'content',
+    orientation: { axis: 'top' },
+    margin: { item: 6, axis: 8 },
+    zoomMin: 1000 * 60 * 60 * 24 * 365 * 3,
+    zoomMax: 1000 * 60 * 60 * 24 * 365 * 600,
+    start: `${minYear - 5}-01-01`,
+    end: `${maxYear + 5}-01-01`,
+    tooltip: { followMouse: true },
+  });
+
+  // Navigate on item click.
+  timeline.on('select', function (props) {
+    if (!props.items.length) return;
+    const item = items.get(props.items[0]);
+    if (item && item.url) window.location.href = item.url;
+  });
+
+  // ── Year scrubber (draggable marker + slider, two-way synced) ──
+  const slider = document.getElementById('scrub-slider');
+  const yearLabel = document.getElementById('scrub-year');
+  const panelYear = document.getElementById('panel-year');
+  const activeList = document.getElementById('active-list');
+
+  slider.min = minYear;
+  slider.max = maxYear;
+  slider.value = scrubYear;
+
+  timeline.addCustomTime(new Date(scrubYear, 5, 1), 'scrub');
+  timeline.setCustomTimeMarker(String(scrubYear), 'scrub', false);
+
+  function setYear(year, moveMarker) {
+    scrubYear = year;
+    slider.value = year;
+    yearLabel.textContent = year;
+    panelYear.textContent = year;
+    timeline.setCustomTimeMarker(String(year), 'scrub', false);
+    if (moveMarker) timeline.setCustomTime(new Date(year, 5, 1), 'scrub');
+    renderActive(year);
+  }
+
+  function renderActive(year) {
+    const active = raw.items.filter(i => i.startYear <= year && year <= i.endYear);
+    const byRegion = {};
+    active.forEach(i => { (byRegion[i.group] = byRegion[i.group] || []).push(i); });
+
+    const regionOrder = raw.groups.map(g => g.id);
+    let html = '';
+    regionOrder.forEach(rgn => {
+      const list = byRegion[rgn];
+      if (!list || !list.length) return;
+      list.sort((a, b) => a.startYear - b.startYear);
+      html += `<div class="active-region"><div class="rgn">${rgn}</div>`;
+      list.forEach(i => {
+        const span = i.startYear === i.endYear ? i.startYear : `${i.startYear}–${i.endYear}`;
+        html += `<a class="active-item" href="${i.url}" style="border-left-color:${i.eraColor}33">
+          ${i.content} <span class="yr">${span}</span></a>`;
+      });
+      html += `</div>`;
+    });
+    activeList.innerHTML = html || '<div class="active-empty">Nothing recorded this year.</div>';
+  }
+
+  slider.addEventListener('input', () => setYear(parseInt(slider.value, 10), true));
+  timeline.on('timechange', e => {
+    if (e.id === 'scrub') setYear(e.time.getFullYear(), false);
+  });
+
+  setYear(scrubYear, true);
+}());
+</script>
+{% endblock %}

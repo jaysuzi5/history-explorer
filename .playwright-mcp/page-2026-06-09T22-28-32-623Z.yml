@@ -1,0 +1,164 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e3]:
+      - link " History Explorer" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e5]: 
+        - text: History Explorer
+      - list [ref=e7]:
+        - listitem [ref=e8]:
+          - link " All Eras" [ref=e9] [cursor=pointer]:
+            - /url: /
+            - generic [ref=e10]: 
+            - text: All Eras
+  - main [ref=e11]:
+    - generic [ref=e14]:
+      - generic [ref=e15]:
+        - navigation "breadcrumb" [ref=e16]:
+          - list [ref=e17]:
+            - listitem [ref=e18]:
+              - link "Home" [ref=e19] [cursor=pointer]:
+                - /url: /
+            - listitem [ref=e20]: / Napoleonic Era
+        - heading "Napoleonic Era" [level=1] [ref=e21]
+        - paragraph [ref=e22]: 1799 – 1815
+      - img "Napoleonic Era" [ref=e24]
+    - paragraph [ref=e26]: Napoleon Bonaparte's meteoric rise reshaped Europe through conquest, law, and force of personality. From consul to emperor, he built an empire stretching from Portugal to Moscow — before it unravelled in the snows of Russia and on the fields of Waterloo.
+    - generic [ref=e27]:
+      - heading "Periods" [level=3] [ref=e28]
+      - generic [ref=e29]:
+        - link "The Consulate 1799–1804" [ref=e30] [cursor=pointer]:
+          - /url: /explore/napoleonic-era/period/consulate/
+        - link "First French Empire 1804–1812" [ref=e31] [cursor=pointer]:
+          - /url: /explore/napoleonic-era/period/first-french-empire/
+        - link "The Fall 1812–1815" [ref=e32] [cursor=pointer]:
+          - /url: /explore/napoleonic-era/period/napoleonic-fall/
+    - heading "Timeline" [level=3] [ref=e34]
+    - generic [ref=e39]:
+      - generic [ref=e40]:
+        - heading "Key Figures" [level=3] [ref=e41]
+        - generic [ref=e42]:
+          - link "Napoleon Bonaparte Napoleon Bonaparte Emperor of the French r. 1799–1815 Soldier, consul, emperor, and exile — Napoleon Bonaparte's career compressed a century of European history into sixteen years. He reformed …" [ref=e44] [cursor=pointer]:
+            - /url: /explore/napoleonic-era/person/napoleon-bonaparte/
+            - img "Napoleon Bonaparte" [ref=e45]
+            - generic [ref=e46]:
+              - heading "Napoleon Bonaparte" [level=5] [ref=e47]
+              - paragraph [ref=e48]: Emperor of the French
+              - paragraph [ref=e49]: r. 1799–1815
+              - paragraph [ref=e50]: Soldier, consul, emperor, and exile — Napoleon Bonaparte's career compressed a century of European history into sixteen years. He reformed …
+          - link "Joséphine de Beauharnais Joséphine de Beauharnais Empress of the French r. 1804–1809 Born in Martinique, widowed by the Terror, Joséphine became Napoleon's first wife and Empress of the French. Their famously passionate …" [ref=e52] [cursor=pointer]:
+            - /url: /explore/napoleonic-era/person/josephine-de-beauharnais/
+            - img "Joséphine de Beauharnais" [ref=e53]
+            - generic [ref=e54]:
+              - heading "Joséphine de Beauharnais" [level=5] [ref=e55]
+              - paragraph [ref=e56]: Empress of the French
+              - paragraph [ref=e57]: r. 1804–1809
+              - paragraph [ref=e58]: Born in Martinique, widowed by the Terror, Joséphine became Napoleon's first wife and Empress of the French. Their famously passionate …
+          - 'link "Charles-Maurice de Talleyrand Charles-Maurice de Talleyrand Foreign Minister of France; Prince of Benevento The supreme survivor of European politics: bishop under the Ancien Régime, revolutionary diplomat, Napoleon''s foreign minister, and architect of the …" [ref=e60] [cursor=pointer]':
+            - /url: /explore/napoleonic-era/person/talleyrand/
+            - img "Charles-Maurice de Talleyrand" [ref=e61]
+            - generic [ref=e62]:
+              - heading "Charles-Maurice de Talleyrand" [level=5] [ref=e63]
+              - paragraph [ref=e64]: Foreign Minister of France; Prince of Benevento
+              - paragraph [ref=e65]: "The supreme survivor of European politics: bishop under the Ancien Régime, revolutionary diplomat, Napoleon's foreign minister, and architect of the …"
+          - link "Duke of Wellington Duke of Wellington Field Marshal; Duke of Wellington Arthur Wellesley defeated Napoleon at Waterloo on June 18, 1815 — the battle that ended the Napoleonic Era. A meticulous …" [ref=e67] [cursor=pointer]:
+            - /url: /explore/napoleonic-era/person/duke-of-wellington/
+            - img "Duke of Wellington" [ref=e68]
+            - generic [ref=e69]:
+              - heading "Duke of Wellington" [level=5] [ref=e70]
+              - paragraph [ref=e71]: Field Marshal; Duke of Wellington
+              - paragraph [ref=e72]: Arthur Wellesley defeated Napoleon at Waterloo on June 18, 1815 — the battle that ended the Napoleonic Era. A meticulous …
+          - link "Marshal Michel Ney Marshal Michel Ney Marshal of France; Prince of Moscow \"The Bravest of the Brave\" — Napoleon's finest combat commander, who personally led the rearguard during the catastrophic retreat from …" [ref=e74] [cursor=pointer]:
+            - /url: /explore/napoleonic-era/person/marshal-michel-ney/
+            - img "Marshal Michel Ney" [ref=e75]
+            - generic [ref=e76]:
+              - heading "Marshal Michel Ney" [level=5] [ref=e77]
+              - paragraph [ref=e78]: Marshal of France; Prince of Moscow
+              - paragraph [ref=e79]: "\"The Bravest of the Brave\" — Napoleon's finest combat commander, who personally led the rearguard during the catastrophic retreat from …"
+      - generic [ref=e80]:
+        - heading "Key Events" [level=3] [ref=e81]
+        - generic [ref=e82]:
+          - link " Napoleon Crowned Emperor 1804 · Political On December 2, 1804, Napoleon crowned himself Emperor of the French in Notre-Dame Cathedral, in the presence of Pope Pius …" [ref=e84] [cursor=pointer]:
+            - /url: /explore/napoleonic-era/event/napoleon-crowned-emperor/
+            - generic [ref=e86]: 
+            - generic [ref=e87]:
+              - heading "Napoleon Crowned Emperor" [level=5] [ref=e88]
+              - paragraph [ref=e89]: 1804 · Political
+              - paragraph [ref=e90]: On December 2, 1804, Napoleon crowned himself Emperor of the French in Notre-Dame Cathedral, in the presence of Pope Pius …
+          - link "Battle of Austerlitz 1805 · Battle On December 2, 1805 — the first anniversary of his coronation — Napoleon defeated the combined armies of Russia and …" [ref=e92] [cursor=pointer]:
+            - /url: /explore/napoleonic-era/event/battle-of-austerlitz/
+            - generic [ref=e94]:
+              - heading "Battle of Austerlitz" [level=5] [ref=e95]
+              - paragraph [ref=e96]: 1805 · Battle
+              - paragraph [ref=e97]: On December 2, 1805 — the first anniversary of his coronation — Napoleon defeated the combined armies of Russia and …
+          - link "Battle of Trafalgar 1805 · Battle On October 21, 1805, Admiral Horatio Nelson destroyed the combined French and Spanish fleet off Cape Trafalgar, ensuring British naval …" [ref=e99] [cursor=pointer]:
+            - /url: /explore/napoleonic-era/event/battle-of-trafalgar/
+            - generic [ref=e101]:
+              - heading "Battle of Trafalgar" [level=5] [ref=e102]
+              - paragraph [ref=e103]: 1805 · Battle
+              - paragraph [ref=e104]: On October 21, 1805, Admiral Horatio Nelson destroyed the combined French and Spanish fleet off Cape Trafalgar, ensuring British naval …
+          - 'link "Battle of Borodino 1812 · Battle The bloodiest day of the Napoleonic Wars: 70,000 casualties as Napoleon''s Grande Armée fought the Russian army at Borodino on …" [ref=e106] [cursor=pointer]':
+            - /url: /explore/napoleonic-era/event/battle-of-borodino/
+            - generic [ref=e108]:
+              - heading "Battle of Borodino" [level=5] [ref=e109]
+              - paragraph [ref=e110]: 1812 · Battle
+              - paragraph [ref=e111]: "The bloodiest day of the Napoleonic Wars: 70,000 casualties as Napoleon's Grande Armée fought the Russian army at Borodino on …"
+          - link "Invasion of Russia 1812 1812–1812 · Battle Napoleon's Grande Armée of 600,000 men crossed into Russia on June 24, 1812. Five months later, fewer than 100,000 returned. …" [ref=e113] [cursor=pointer]:
+            - /url: /explore/napoleonic-era/event/invasion-of-russia-1812/
+            - generic [ref=e115]:
+              - heading "Invasion of Russia 1812" [level=5] [ref=e116]
+              - paragraph [ref=e117]: 1812–1812 · Battle
+              - paragraph [ref=e118]: Napoleon's Grande Armée of 600,000 men crossed into Russia on June 24, 1812. Five months later, fewer than 100,000 returned. …
+          - 'link "Battle of Nations (Leipzig) 1813 · Battle The largest battle in European history before World War I: 600,000 soldiers from France, Russia, Prussia, Austria, and Sweden fought …" [ref=e120] [cursor=pointer]':
+            - /url: /explore/napoleonic-era/event/battle-of-nations-leipzig/
+            - generic [ref=e122]:
+              - heading "Battle of Nations (Leipzig)" [level=5] [ref=e123]
+              - paragraph [ref=e124]: 1813 · Battle
+              - paragraph [ref=e125]: "The largest battle in European history before World War I: 600,000 soldiers from France, Russia, Prussia, Austria, and Sweden fought …"
+          - link " Congress of Vienna 1814–1815 · Political The Congress of Vienna (September 1814 – June 1815) reshaped Europe after Napoleon. [[alexander-i]] of Russia was its dominant figure, …" [ref=e127] [cursor=pointer]:
+            - /url: /explore/napoleonic-era/event/congress-of-vienna/
+            - generic [ref=e129]: 
+            - generic [ref=e130]:
+              - heading "Congress of Vienna" [level=5] [ref=e131]
+              - paragraph [ref=e132]: 1814–1815 · Political
+              - paragraph [ref=e133]: The Congress of Vienna (September 1814 – June 1815) reshaped Europe after Napoleon. [[alexander-i]] of Russia was its dominant figure, …
+          - link "Battle of Waterloo 1815 · Battle On June 18, 1815, [[duke-of-wellington]] and Prussian Field Marshal Blücher defeated [[napoleon-bonaparte]] at Waterloo, ending the Hundred Days and the …" [ref=e135] [cursor=pointer]:
+            - /url: /explore/napoleonic-era/event/battle-of-waterloo/
+            - generic [ref=e137]:
+              - heading "Battle of Waterloo" [level=5] [ref=e138]
+              - paragraph [ref=e139]: 1815 · Battle
+              - paragraph [ref=e140]: On June 18, 1815, [[duke-of-wellington]] and Prussian Field Marshal Blücher defeated [[napoleon-bonaparte]] at Waterloo, ending the Hundred Days and the …
+          - link " Hundred Days 1815–1815 · Political Napoleon escaped from Elba on February 26, 1815 and ruled France for 111 days before his defeat at Waterloo. His …" [ref=e142] [cursor=pointer]:
+            - /url: /explore/napoleonic-era/event/hundred-days/
+            - generic [ref=e144]: 
+            - generic [ref=e145]:
+              - heading "Hundred Days" [level=5] [ref=e146]
+              - paragraph [ref=e147]: 1815–1815 · Political
+              - paragraph [ref=e148]: Napoleon escaped from Elba on February 26, 1815 and ruled France for 111 days before his defeat at Waterloo. His …
+    - generic [ref=e149]:
+      - heading "Relationship Web" [level=3] [ref=e150]
+      - paragraph [ref=e157]:
+        - generic [ref=e158]: 
+        - text: Click any node to explore that entity. Drag to pan, scroll to zoom.
+      - list "Entities in relationship graph" [ref=e159]:
+        - listitem [ref=e160]: Napoleon Bonaparte (person)
+        - listitem [ref=e161]: Joséphine de Beauharnais (person)
+        - listitem [ref=e162]: Charles-Maurice de Talleyrand (person)
+        - listitem [ref=e163]: Duke of Wellington (person)
+        - listitem [ref=e164]: Marshal Michel Ney (person)
+        - listitem [ref=e165]: Napoleon Crowned Emperor (event)
+        - listitem [ref=e166]: Battle of Austerlitz (event)
+        - listitem [ref=e167]: Battle of Trafalgar (event)
+        - listitem [ref=e168]: Battle of Borodino (event)
+        - listitem [ref=e169]: Invasion of Russia 1812 (event)
+        - listitem [ref=e170]: Battle of Nations (Leipzig) (event)
+        - listitem [ref=e171]: Congress of Vienna (event)
+        - listitem [ref=e172]: Battle of Waterloo (event)
+        - listitem [ref=e173]: Hundred Days (event)
+        - listitem [ref=e174]: The Consulate (period)
+        - listitem [ref=e175]: First French Empire (period)
+        - listitem [ref=e176]: The Fall (period)
+  - contentinfo [ref=e177]:
+    - paragraph [ref=e179]:
+      - generic [ref=e180]: 
+      - text: History Explorer — history as a connected web

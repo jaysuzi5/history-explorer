@@ -12,6 +12,30 @@ def galaxy(request):
     return render(request, 'explorer/galaxy.html', {'eras': eras})
 
 
+def globe(request):
+    eras = Era.objects.filter(status='published').order_by('order')
+    return render(request, 'explorer/globe.html', {
+        'eras': eras,
+        'globe_json': json.dumps(build_globe_data()),
+        'breadcrumbs': [
+            {'label': 'Home', 'url': '/'},
+            {'label': 'Globe', 'url': None},
+        ],
+    })
+
+
+def timeline(request):
+    eras = Era.objects.filter(status='published').order_by('order')
+    return render(request, 'explorer/timeline.html', {
+        'eras': eras,
+        'timeline_json': json.dumps(build_region_timeline_data()),
+        'breadcrumbs': [
+            {'label': 'Home', 'url': '/'},
+            {'label': 'Timeline', 'url': None},
+        ],
+    })
+
+
 def era_overview(request, era_slug):
     era = get_object_or_404(Era, slug=era_slug, status='published')
     people = list(era.people.filter(status='published'))
@@ -158,6 +182,120 @@ def _rel_counts(ct, pks):
                 .values('to_entity_id').annotate(c=Count('id'))):
         counts[row['to_entity_id']] = counts[row['to_entity_id']] + row['c']
     return counts
+
+
+# ── globe builder ─────────────────────────────────────────────────────────────
+
+def build_globe_data():
+    """Points for every geocoded Person/Event, jittered so co-located points spread."""
+    import math
+
+    points = []
+    for p in Person.objects.filter(status='published',
+                                   latitude__isnull=False).select_related('era'):
+        when = p.reign_start or p.birth_year
+        points.append({
+            'lat': p.latitude, 'lng': p.longitude, 'type': 'person',
+            'name': p.name, 'url': p.get_absolute_url(),
+            'era': p.era.name, 'eraSlug': p.era.slug, 'eraColor': p.era.color_accent,
+            'region': p.region, 'year': when, 'summary': p.summary[:160],
+        })
+    for e in Event.objects.filter(status='published',
+                                  latitude__isnull=False).select_related('era'):
+        points.append({
+            'lat': e.latitude, 'lng': e.longitude, 'type': 'event',
+            'name': e.name, 'url': e.get_absolute_url(),
+            'era': e.era.name, 'eraSlug': e.era.slug, 'eraColor': e.era.color_accent,
+            'region': e.region, 'year': e.year, 'summary': e.summary[:160],
+        })
+
+    # Spread points sharing the same coordinate around a small circle so the
+    # globe doesn't stack them into a single unclickable dot.
+    buckets = {}
+    for pt in points:
+        key = (round(pt['lat'], 3), round(pt['lng'], 3))
+        buckets.setdefault(key, []).append(pt)
+    for group in buckets.values():
+        if len(group) == 1:
+            continue
+        radius = 0.55
+        for i, pt in enumerate(group):
+            angle = 2 * math.pi * i / len(group)
+            pt['lat'] = round(pt['lat'] + radius * math.sin(angle), 5)
+            pt['lng'] = round(pt['lng'] + radius * math.cos(angle), 5)
+
+    return {'points': points}
+
+
+# ── cross-region timeline builder ──────────────────────────────────────────────
+
+# West-to-east ordering of swim-lanes; anything else falls to the bottom A–Z.
+REGION_ORDER = ['Britain', 'Iberia', 'France', 'Low Countries',
+                'Central Europe', 'Russia']
+
+
+def _region_rank(region):
+    try:
+        return (0, REGION_ORDER.index(region))
+    except ValueError:
+        return (1, region)
+
+
+def build_region_timeline_data():
+    """Items grouped by region across all eras, colored by era.
+
+    People with a reign show a reign range; other people show a lifespan range
+    (lighter); events show a point or a year-span range. Each item carries its
+    start/end *years* so the front-end can compute what is active at any scrubbed year.
+    """
+    items = []
+    regions = set()
+
+    def style_for(color, faint=False):
+        bg = f'{color}22' if faint else f'{color}55'
+        return f'background-color: {bg}; border-color: {color}; color: #f0e6c8;'
+
+    for p in Person.objects.filter(status='published').select_related('era'):
+        region = p.region or 'Other'
+        color = p.era.color_accent
+        if p.reign_start:
+            start_y, end_y, faint, kind = p.reign_start, p.reign_end, False, 'reign'
+        elif p.birth_year:
+            start_y, end_y, faint, kind = p.birth_year, p.death_year, True, 'life'
+        else:
+            continue
+        regions.add(region)
+        item = {
+            'id': f'p-{p.slug}', 'group': region, 'content': p.name,
+            'start': f'{start_y}-06-01', 'type': 'range' if end_y else 'point',
+            'url': p.get_absolute_url(), 'title': p.summary[:120],
+            'style': style_for(color, faint), 'className': f'tl-{kind}',
+            'era': p.era.name, 'eraColor': color, 'kind': kind,
+            'startYear': start_y, 'endYear': end_y or start_y,
+        }
+        if end_y:
+            item['end'] = f'{end_y}-06-01'
+        items.append(item)
+
+    for e in Event.objects.filter(status='published').select_related('era'):
+        region = e.region or 'Other'
+        color = e.era.color_accent
+        regions.add(region)
+        item = {
+            'id': f'e-{e.slug}', 'group': region, 'content': e.name,
+            'start': f'{e.year}-06-01', 'type': 'range' if e.end_year else 'point',
+            'url': e.get_absolute_url(), 'title': e.summary[:120],
+            'style': style_for(color), 'className': 'tl-event',
+            'era': e.era.name, 'eraColor': color, 'kind': 'event',
+            'startYear': e.year, 'endYear': e.end_year or e.year,
+        }
+        if e.end_year:
+            item['end'] = f'{e.end_year}-06-01'
+        items.append(item)
+
+    groups = [{'id': r, 'content': r}
+              for r in sorted(regions, key=_region_rank)]
+    return {'items': items, 'groups': groups}
 
 
 # ── graph builders ────────────────────────────────────────────────────────────

@@ -654,7 +654,7 @@ EVENTS = {
             'year': 1793, 'end_year': 1794,
             'location': 'France',
             'summary': (
-                'Under [[maximilien-robespierre]] and the Committee of Public Safety, '
+                'Under Maximilien Robespierre and the Committee of Public Safety, '
                 'France executed approximately 17,000 people and imprisoned 300,000 '
                 'more between September 1793 and July 1794. The Terror was justified '
                 'as defense of the Revolution against internal enemies — until it '
@@ -788,7 +788,7 @@ EVENTS = {
             'summary': (
                 'On December 2, 1805 — the first anniversary of his coronation — '
                 'Napoleon defeated the combined armies of Russia and Austria in what '
-                'many consider his tactical masterpiece. [[alexander-i]] of Russia '
+                'many consider his tactical masterpiece. Alexander I of Russia '
                 'was present and retreated in humiliation. The battle shattered '
                 'the Third Coalition.'
             ),
@@ -822,7 +822,7 @@ EVENTS = {
             'summary': (
                 'Napoleon\'s Grande Armée of 600,000 men crossed into Russia on June '
                 '24, 1812. Five months later, fewer than 100,000 returned. '
-                '[[alexander-i]]\'s refusal to negotiate, the burning of Moscow, and '
+                'Alexander I\'s refusal to negotiate, the burning of Moscow, and '
                 'the catastrophic winter retreat broke the Napoleonic Empire.'
             ),
             'body': (
@@ -955,8 +955,8 @@ EVENTS = {
             'period_slug': 'napoleonic-fall',
             'year': 1815, 'location': 'Waterloo, Belgium',
             'summary': (
-                'On June 18, 1815, [[duke-of-wellington]] and Prussian Field Marshal '
-                'Blücher defeated [[napoleon-bonaparte]] at Waterloo, ending the '
+                'On June 18, 1815, the Duke of Wellington and Prussian Field Marshal '
+                'Blücher defeated Napoleon Bonaparte at Waterloo, ending the '
                 'Hundred Days and the Napoleonic Era. "Waterloo" became a byword '
                 'for decisive, catastrophic defeat.'
             ),
@@ -989,9 +989,9 @@ EVENTS = {
             'location': 'Vienna, Austria',
             'summary': (
                 'The Congress of Vienna (September 1814 – June 1815) reshaped Europe '
-                'after Napoleon. [[alexander-i]] of Russia was its dominant figure, '
+                'after Napoleon. Alexander I of Russia was its dominant figure, '
                 'pressing for constitutional government in Poland and a Holy Alliance '
-                'of Christian monarchs. [[talleyrand]] famously represented defeated '
+                'of Christian monarchs. Talleyrand famously represented defeated '
                 'France as an equal power.'
             ),
             'body': (

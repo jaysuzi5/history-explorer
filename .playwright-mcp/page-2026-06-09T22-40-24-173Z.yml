@@ -1,0 +1,37 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e3]:
+      - link " History Explorer" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e5]: 
+        - text: History Explorer
+      - list [ref=e7]:
+        - listitem [ref=e8]:
+          - link " All Eras" [ref=e9] [cursor=pointer]:
+            - /url: /
+            - generic [ref=e10]: 
+            - text: All Eras
+        - listitem [ref=e11]:
+          - link " Globe" [ref=e12] [cursor=pointer]:
+            - /url: /globe/
+            - generic [ref=e13]: 
+            - text: Globe
+  - main [ref=e14]:
+    - generic [ref=e15]:
+      - heading "Explore by Place" [level=1] [ref=e16]
+      - paragraph [ref=e17]: Spin the globe. Gold = people, crimson = events. Click any marker to dive in. Filter by era at left.
+    - generic [ref=e18]:
+      - generic [ref=e24]:
+        - generic [ref=e25]: Filter by Era
+        - generic [ref=e26] [cursor=pointer]: All
+        - generic [ref=e27] [cursor=pointer]: Romanov Dynasty
+        - generic [ref=e29] [cursor=pointer]: French Revolution
+        - generic [ref=e31] [cursor=pointer]: Napoleonic Era
+      - generic [ref=e33]:
+        - generic [ref=e34]: Person
+        - generic [ref=e36]: Event
+      - generic [ref=e38]: Drag to rotate · scroll to zoom · auto-rotation pauses on interaction
+  - contentinfo [ref=e39]:
+    - paragraph [ref=e41]:
+      - generic [ref=e42]: 
+      - text: History Explorer — history as a connected web

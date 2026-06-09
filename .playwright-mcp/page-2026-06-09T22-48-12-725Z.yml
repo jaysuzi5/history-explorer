@@ -1,0 +1,129 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e3]:
+      - link " History Explorer" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e5]: 
+        - text: History Explorer
+      - list [ref=e7]:
+        - listitem [ref=e8]:
+          - link " All Eras" [ref=e9] [cursor=pointer]:
+            - /url: /
+            - generic [ref=e10]: 
+            - text: All Eras
+        - listitem [ref=e11]:
+          - link " Globe" [ref=e12] [cursor=pointer]:
+            - /url: /globe/
+            - generic [ref=e13]: 
+            - text: Globe
+        - listitem [ref=e14]:
+          - link " Timeline" [ref=e15] [cursor=pointer]:
+            - /url: /timeline/
+            - generic [ref=e16]: 
+            - text: Timeline
+  - main [ref=e17]:
+    - generic [ref=e18]:
+      - navigation "breadcrumb" [ref=e19]:
+        - list [ref=e20]:
+          - listitem [ref=e21]:
+            - link "Home" [ref=e22] [cursor=pointer]:
+              - /url: /
+          - listitem [ref=e23]: / Timeline
+      - heading "History Across Regions" [level=1] [ref=e24]
+      - paragraph [ref=e25]: Each lane is a region; each bar an era. Drag the gold marker — or the slider — to a year to see what was happening everywhere at once.
+      - generic [ref=e26]:
+        - generic [ref=e27]: Romanov Dynasty
+        - generic [ref=e29]: French Revolution
+        - generic [ref=e31]: Napoleonic Era
+      - generic [ref=e33]:
+        - slider [ref=e34]: "1765"
+        - generic [ref=e35]: "1765"
+      - generic [ref=e36]:
+        - generic [ref=e57]:
+          - generic [ref=e59]:
+            - 'generic "Current time: Tuesday, June 9th 2026, 18:48:12"'
+            - 'generic "Time: Saturday, June 1st 1765, 0:00:00" [ref=e68]':
+              - generic [ref=e70]: "1765"
+          - generic [ref=e82]:
+            - generic [ref=e86]: Duke of Wellington
+            - generic [ref=e87]:
+              - generic [ref=e89]: Battle of Austerlitz
+              - generic [ref=e92]: Battle of Nations (Leipzig)
+              - generic [ref=e96]: Congress of Vienna
+            - generic [ref=e97]:
+              - generic [ref=e100]: Louis XVI
+              - generic [ref=e103]: Marie Antoinette
+              - generic [ref=e106]: Napoleon Bonaparte
+              - generic [ref=e109]: Joséphine de Beauharnais
+              - generic [ref=e112]: Charles-Maurice de Talleyrand
+              - generic [ref=e115]: Marquis de Lafayette
+              - generic [ref=e118]: Maximilien Robespierre
+              - generic [ref=e121]: Georges Danton
+              - generic [ref=e124]: Marshal Michel Ney
+              - generic [ref=e126]: Declaration of the Rights of Man
+              - generic [ref=e129]: Storming of the Bastille
+              - generic [ref=e132]: Execution of Louis XVI
+              - generic [ref=e136]: Reign of Terror
+              - generic [ref=e138]: Coup of 18 Brumaire
+              - generic [ref=e141]: Napoleon Crowned Emperor
+              - generic [ref=e144]: Hundred Days
+            - generic [ref=e147]: Battle of Trafalgar
+            - generic [ref=e151]: Battle of Waterloo
+            - generic [ref=e153]:
+              - generic [ref=e156]: Michael I
+              - generic [ref=e159]: Alexis I
+              - generic [ref=e162]: Feodor III
+              - generic [ref=e165]: Ivan V
+              - generic [ref=e168]: Peter I
+              - generic [ref=e171]: Catherine I
+              - generic [ref=e174]: Peter II
+              - generic [ref=e177]: Anna
+              - generic [ref=e180]: Ivan VI
+              - generic [ref=e183]: Elizabeth
+              - generic [ref=e185]: Peter III
+              - generic [ref=e188]: Catherine II
+              - generic [ref=e191]: Paul I
+              - generic [ref=e194]: Alexander I
+              - generic [ref=e197]: Nicholas I
+              - generic [ref=e200]: Alexander II
+              - generic [ref=e203]: Alexander III
+              - generic [ref=e206]: Nicholas II
+              - generic [ref=e208]: Battle of Borodino
+              - generic [ref=e211]: Invasion of Russia 1812
+          - generic [ref=e214]:
+            - generic [ref=e216]: Britain
+            - generic [ref=e218]: Central Europe
+            - generic [ref=e220]: France
+            - generic [ref=e222]: Iberia
+            - generic [ref=e224]: Low Countries
+            - generic [ref=e226]: Russia
+          - generic [ref=e228]:
+            - generic [ref=e229]: "1600"
+            - generic [ref=e230]: "1650"
+            - generic [ref=e231]: "1700"
+            - generic [ref=e232]: "1750"
+            - generic [ref=e233]: "1800"
+            - generic [ref=e234]: "1850"
+            - generic [ref=e235]: "1900"
+        - complementary [ref=e40]:
+          - generic [ref=e41]:
+            - heading "Active in 1765" [level=3] [ref=e42]
+            - generic [ref=e43]:
+              - generic [ref=e44]:
+                - generic [ref=e45]: France
+                - link "Charles-Maurice de Talleyrand 1754–1838" [ref=e46] [cursor=pointer]:
+                  - /url: /explore/napoleonic-era/person/talleyrand/
+                - link "Marquis de Lafayette 1757–1834" [ref=e47] [cursor=pointer]:
+                  - /url: /explore/french-revolution/person/marquis-de-lafayette/
+                - link "Maximilien Robespierre 1758–1794" [ref=e48] [cursor=pointer]:
+                  - /url: /explore/french-revolution/person/maximilien-robespierre/
+                - link "Georges Danton 1759–1794" [ref=e49] [cursor=pointer]:
+                  - /url: /explore/french-revolution/person/georges-danton/
+              - generic [ref=e50]:
+                - generic [ref=e51]: Russia
+                - link "Catherine II 1762–1796" [ref=e52] [cursor=pointer]:
+                  - /url: /explore/romanov-dynasty/person/catherine-ii/
+  - contentinfo [ref=e53]:
+    - paragraph [ref=e55]:
+      - generic [ref=e56]: 
+      - text: History Explorer — history as a connected web

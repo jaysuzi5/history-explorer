@@ -146,6 +146,9 @@
 
 {% block extra_js %}
 <script src="https://cdn.jsdelivr.net/npm/cytoscape@3.30.2/dist/cytoscape.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/layout-base@2.0.1/layout-base.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/cose-base@2.2.0/cose-base.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/cytoscape-fcose@2.2.0/cytoscape-fcose.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vis-timeline@7.7.3/standalone/umd/vis-timeline-graph2d.min.js"></script>
 <script>
 (function () {
@@ -250,13 +253,29 @@
       },
     ],
     layout: {
-      name: 'cose',
+      name: typeof cytoscape('layout', 'fcose') === 'function' ? 'fcose' : 'cose',
+      quality: 'proof',
       animate: true,
+      animationDuration: 500,
       randomize: true,
-      nodeRepulsion: 8000,
-      idealEdgeLength: 100,
+      nodeRepulsion: 6500,
+      idealEdgeLength: 120,
+      edgeElasticity: 0.45,
+      gravity: 0.3,
+      gravityRange: 3.8,
+      numIter: 2500,
+      nodeSeparation: 90,
+      packComponents: true,
+      tile: true,
+      fit: true,
+      padding: 40,
     },
+    minZoom: 0.3,
+    maxZoom: 2.5,
   });
+
+  // Re-fit once layout settles so the graph never loads off-screen.
+  cy.one('layoutstop', () => cy.fit(undefined, 40));
 
   cy.on('tap', 'node', function (evt) {
     const url = evt.target.data('url');

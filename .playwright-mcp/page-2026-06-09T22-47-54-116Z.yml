@@ -1,0 +1,62 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e3]:
+      - link " History Explorer" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e5]: 
+        - text: History Explorer
+      - list [ref=e7]:
+        - listitem [ref=e8]:
+          - link " All Eras" [ref=e9] [cursor=pointer]:
+            - /url: /
+            - generic [ref=e10]: 
+            - text: All Eras
+        - listitem [ref=e11]:
+          - link " Globe" [ref=e12] [cursor=pointer]:
+            - /url: /globe/
+            - generic [ref=e13]: 
+            - text: Globe
+        - listitem [ref=e14]:
+          - link " Timeline" [ref=e15] [cursor=pointer]:
+            - /url: /timeline/
+            - generic [ref=e16]: 
+            - text: Timeline
+  - main [ref=e17]:
+    - generic [ref=e18]:
+      - navigation "breadcrumb" [ref=e19]:
+        - list [ref=e20]:
+          - listitem [ref=e21]:
+            - link "Home" [ref=e22] [cursor=pointer]:
+              - /url: /
+          - listitem [ref=e23]: / Timeline
+      - heading "History Across Regions" [level=1] [ref=e24]
+      - paragraph [ref=e25]: Each lane is a region; each bar an era. Drag the gold marker — or the slider — to a year to see what was happening everywhere at once.
+      - generic [ref=e26]:
+        - generic [ref=e27]: Romanov Dynasty
+        - generic [ref=e29]: French Revolution
+        - generic [ref=e31]: Napoleonic Era
+      - generic [ref=e33]:
+        - slider [ref=e34]: "1765"
+        - generic [ref=e35]: "1765"
+      - complementary [ref=e40]:
+        - generic [ref=e41]:
+          - heading "Active in 1765" [level=3] [ref=e42]
+          - generic [ref=e43]:
+            - generic [ref=e44]:
+              - generic [ref=e45]: France
+              - link "Charles-Maurice de Talleyrand 1754–1838" [ref=e46] [cursor=pointer]:
+                - /url: /explore/napoleonic-era/person/talleyrand/
+              - link "Marquis de Lafayette 1757–1834" [ref=e47] [cursor=pointer]:
+                - /url: /explore/french-revolution/person/marquis-de-lafayette/
+              - link "Maximilien Robespierre 1758–1794" [ref=e48] [cursor=pointer]:
+                - /url: /explore/french-revolution/person/maximilien-robespierre/
+              - link "Georges Danton 1759–1794" [ref=e49] [cursor=pointer]:
+                - /url: /explore/french-revolution/person/georges-danton/
+            - generic [ref=e50]:
+              - generic [ref=e51]: Russia
+              - link "Catherine II 1762–1796" [ref=e52] [cursor=pointer]:
+                - /url: /explore/romanov-dynasty/person/catherine-ii/
+  - contentinfo [ref=e53]:
+    - paragraph [ref=e55]:
+      - generic [ref=e56]: 
+      - text: History Explorer — history as a connected web

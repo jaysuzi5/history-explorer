@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Globe — History Explorer{% endblock %}
+{% block meta_description %}Explore history geographically — spin the globe to discover people and events by place.{% endblock %}
+
+{% block extra_css %}
+<style>
+  .globe-stage { position: relative; width: 100%; height: 78vh; min-height: 480px;
+    background: radial-gradient(circle at 50% 40%, #0c1430 0%, #05070f 70%); overflow: hidden; }
+  #globeViz { width: 100%; height: 100%; }
+
+  .globe-panel { position: absolute; z-index: 5; background: rgba(10, 12, 22, 0.82);
+    border: 1px solid var(--he-border, #2a2f45); border-radius: 8px;
+    padding: 0.75rem 0.9rem; backdrop-filter: blur(4px); }
+  .globe-filters { top: 1rem; left: 1rem; max-width: 240px; }
+  .globe-legend { bottom: 1rem; left: 1rem; }
+  .globe-hint { bottom: 1rem; right: 1rem; color: #8a90a8; font-size: 0.78rem; max-width: 220px; text-align: right; }
+
+  .globe-filters .panel-title { font-family: 'Cinzel', serif; font-size: 0.8rem;
+    letter-spacing: 0.06em; text-transform: uppercase; color: #aeb4cc; margin-bottom: 0.5rem; }
+  .era-chip { display: inline-flex; align-items: center; gap: 0.4rem; cursor: pointer;
+    font-size: 0.82rem; padding: 0.28rem 0.6rem; margin: 0.15rem 0.15rem 0 0;
+    border: 1px solid var(--he-border, #2a2f45); border-radius: 999px;
+    color: #d7dbe8; transition: background 0.15s, border-color 0.15s; user-select: none; }
+  .era-chip:hover { background: rgba(255,255,255,0.06); }
+  .era-chip.active { background: rgba(255,255,255,0.1); border-color: #c9a84c; color: #fff; }
+  .era-chip .dot { width: 10px; height: 10px; border-radius: 50%; flex: 0 0 10px; }
+
+  .globe-legend .legend-row { display: flex; align-items: center; gap: 0.5rem;
+    font-size: 0.82rem; color: #d7dbe8; }
+  .globe-legend .legend-row + .legend-row { margin-top: 0.3rem; }
+  .legend-swatch { width: 12px; height: 12px; border-radius: 50%; }
+
+  .globe-tip { font-family: 'Inter', sans-serif; }
+  .globe-tip .tip-name { font-weight: 600; color: #fff; }
+  .globe-tip .tip-meta { color: #c9a84c; font-size: 0.75rem; }
+  .globe-tip .tip-sum { color: #c2c7d8; font-size: 0.75rem; max-width: 220px; }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="container mt-4 mb-2">
+  <h1 class="era-title">Explore by Place</h1>
+  <p class="text-muted">Spin the globe. Gold = people, crimson = events. Click any marker to dive in. Filter by era at left.</p>
+</section>
+
+<div class="globe-stage">
+  <div id="globeViz"></div>
+
+  <div class="globe-panel globe-filters">
+    <div class="panel-title">Filter by Era</div>
+    <span class="era-chip active" data-era="">All</span>
+    {% for era in eras %}
+    <span class="era-chip" data-era="{{ era.slug }}">
+      <span class="dot" style="background: {{ era.color_accent }}"></span>{{ era.name }}
+    </span>
+    {% endfor %}
+  </div>
+
+  <div class="globe-panel globe-legend">
+    <div class="legend-row"><span class="legend-swatch" style="background:#c9a84c"></span>Person</div>
+    <div class="legend-row"><span class="legend-swatch" style="background:#e0556a"></span>Event</div>
+  </div>
+
+  <div class="globe-panel globe-hint">
+    Drag to rotate &middot; scroll to zoom &middot; auto-rotation pauses on interaction
+  </div>
+</div>
+
+<script id="globe-data" type="application/json">{{ globe_json|safe }}</script>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://unpkg.com/globe.gl@2.33.2/dist/globe.gl.min.js"></script>
+<script>
+(function () {
+  const ALL = JSON.parse(document.getElementById('globe-data').textContent).points;
+  const el = document.getElementById('globeViz');
+  if (!el || typeof Globe !== 'function') return;
+
+  const TEX = 'https://unpkg.com/three-globe/example/img/';
+  const world = Globe()(el)
+    .globeImageUrl(TEX + 'earth-dark.jpg')
+    .bumpImageUrl(TEX + 'earth-topology.png')
+    .backgroundImageUrl(TEX + 'night-sky.png')
+    .pointLat('lat')
+    .pointLng('lng')
+    .pointColor(d => d.type === 'person' ? '#c9a84c' : '#e0556a')
+    .pointAltitude(0.025)
+    .pointRadius(0.5)
+    .pointsMerge(false)
+    .pointLabel(d => `
+      <div class="globe-tip">
+        <div class="tip-name">${d.name}</div>
+        <div class="tip-meta">${d.era}${d.year ? ' &middot; ' + d.year : ''}${d.region ? ' &middot; ' + d.region : ''}</div>
+        <div class="tip-sum">${d.summary || ''}</div>
+      </div>`)
+    .onPointClick(d => { if (d.url) window.location.href = d.url; })
+    .pointsData(ALL);
+
+  // Start focused on Europe (where most current content sits).
+  world.pointOfView({ lat: 48, lng: 12, altitude: 1.9 }, 0);
+
+  const controls = world.controls();
+  controls.autoRotate = true;
+  controls.autoRotateSpeed = 0.35;
+  controls.addEventListener('start', () => { controls.autoRotate = false; });
+
+  // Keep globe sized to its container on resize.
+  function resize() {
+    world.width(el.clientWidth).height(el.clientHeight);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // Era filter chips.
+  let activeEra = '';
+  document.querySelectorAll('.era-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('.era-chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      activeEra = chip.dataset.era;
+      world.pointsData(activeEra ? ALL.filter(p => p.eraSlug === activeEra) : ALL);
+    });
+  });
+}());
+</script>
+{% endblock %}

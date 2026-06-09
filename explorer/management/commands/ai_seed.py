@@ -69,6 +69,9 @@ Return a JSON object with these optional top-level arrays:
 - reign_start (int or null)
 - reign_end (int or null)
 - nationality (str, optional)
+- latitude (float or null — decimal degrees of the person's primary seat of power or birthplace, e.g. 59.9311)
+- longitude (float or null — decimal degrees, e.g. 30.3609)
+- region (str — broad geographic region for timeline swim-lanes, e.g. "Russia", "France", "Britain", "Iberia", "Low Countries", "Central Europe")
 
 ### Event fields
 - era_slug (str, required)
@@ -80,7 +83,10 @@ Return a JSON object with these optional top-level arrays:
 - body (str, rich Markdown, optional)
 - year (int, required)
 - end_year (int or null)
-- location (str, optional)
+- location (str, optional — human-readable place, e.g. "Austerlitz, Moravia")
+- latitude (float or null — decimal degrees where the event occurred, e.g. 49.1530)
+- longitude (float or null — decimal degrees, e.g. 16.8760)
+- region (str — broad geographic region for timeline swim-lanes, e.g. "Russia", "France", "Britain", "Iberia", "Low Countries", "Central Europe")
 
 ### Relationship fields
 Connects any two entities (person, event, period, era) by slug.
@@ -99,6 +105,10 @@ Connects any two entities (person, event, period, era) by slug.
 - All slugs must be kebab-case and unique within their type.
 - Body fields support Markdown: ## headers, **bold**, *italic*, lists, blockquotes.
 - Cross-link entities using [[slug]] syntax in body text (e.g., [[peter-i]], [[battle-of-poltava]]).
+- summary fields are plain teasers shown on cards — do NOT put [[slug]] cross-references in summary, only in body.
+- ALWAYS provide latitude, longitude, and region for every person and event so they
+  appear on the globe and the cross-region timeline. Reuse the exact region names listed
+  above when they apply, so timeline lanes stay consistent.
 - Only return entities you are creating/updating — omit types you are not adding.
 - Return ONLY valid JSON. No markdown fences, no explanation outside the JSON.
 """).strip()
