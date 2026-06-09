@@ -10,15 +10,22 @@
 {% block content %}
 
 <!-- Hero banner -->
-<section class="era-hero{% if era.featured_image %} era-hero--image{% endif %}"
-         {% if era.featured_image %}style="background-image: url('{{ era.featured_image.url }}')"{% endif %}>
-  <div class="hero-overlay"></div>
-  <div class="hero-content container">
-    {% include "explorer/_breadcrumb.html" %}
-    <h1 class="era-title mt-2">{{ era.name }}</h1>
-    <p class="era-dates-range text-muted mb-0">
-      {{ era.start_year }}{% if era.end_year %} – {{ era.end_year }}{% endif %}
-    </p>
+<section class="era-hero" style="--era-accent: {{ era.color_accent }}">
+  <div class="container">
+    <div class="era-hero-inner">
+      <div class="era-hero-content">
+        {% include "explorer/_breadcrumb.html" %}
+        <h1 class="era-title mt-2">{{ era.name }}</h1>
+        <p class="era-dates-range text-muted mb-0">
+          {{ era.start_year }}{% if era.end_year %} – {{ era.end_year }}{% endif %}
+        </p>
+      </div>
+      {% if era.featured_image %}
+      <div class="era-hero-img-wrap">
+        <img src="{{ era.featured_image.url }}" alt="{{ era.name }}">
+      </div>
+      {% endif %}
+    </div>
   </div>
 </section>
 

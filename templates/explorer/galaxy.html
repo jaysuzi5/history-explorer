@@ -19,15 +19,15 @@
       <div class="col-md-6 col-lg-4">
         <a href="{{ era.get_absolute_url }}" class="era-card-link text-decoration-none">
           <div class="era-card" style="--era-accent: {{ era.color_accent }}">
-            {% if era.featured_image %}
-            <img src="{{ era.featured_image.url }}" alt="{{ era.name }}" class="era-bg">
-            {% else %}
-            <div class="era-bg-placeholder"></div>
-            {% endif %}
-            <div class="era-overlay">
-              <div class="era-dates small">{{ era.start_year }}{% if era.end_year %} – {{ era.end_year }}{% endif %}</div>
+            <div class="era-card-media">
+              {% if era.featured_image %}
+              <img src="{{ era.featured_image.url }}" alt="{{ era.name }}">
+              {% endif %}
+            </div>
+            <div class="era-card-body">
+              <div class="era-dates">{{ era.start_year }}{% if era.end_year %} – {{ era.end_year }}{% endif %}</div>
               <h2 class="era-name">{{ era.name }}</h2>
-              <p class="era-tagline mb-0">{{ era.tagline }}</p>
+              <p class="era-tagline">{{ era.tagline }}</p>
               <p class="era-summary">{{ era.summary|truncatewords:30 }}</p>
             </div>
           </div>

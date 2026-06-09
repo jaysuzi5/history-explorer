@@ -13,7 +13,9 @@ from django.core.management.base import BaseCommand
 from explorer.models import Era, Person
 
 ERA_WIKI_TITLES = {
-    "romanov-dynasty": "House of Romanov",
+    "romanov-dynasty":  "House of Romanov",
+    "french-revolution": "French Revolution",
+    "napoleonic-era":   "Napoleon",
 }
 
 WIKI_API = "https://en.wikipedia.org/w/api.php"
@@ -40,6 +42,18 @@ WIKI_TITLE_OVERRIDES = {
     "alexander-ii": "Alexander II of Russia",
     "alexander-iii":"Alexander III of Russia",
     "nicholas-ii":  "Nicholas II of Russia",
+    # French Revolution
+    "louis-xvi":                "Louis XVI",
+    "marie-antoinette":         "Marie Antoinette",
+    "maximilien-robespierre":   "Maximilien Robespierre",
+    "georges-danton":           "Georges Danton",
+    "marquis-de-lafayette":     "Gilbert du Motier, Marquis de Lafayette",
+    # Napoleonic Era
+    "napoleon-bonaparte":       "Napoleon",
+    "josephine-de-beauharnais": "Joséphine de Beauharnais",
+    "marshal-michel-ney":       "Michel Ney",
+    "duke-of-wellington":       "Arthur Wellesley, 1st Duke of Wellington",
+    "talleyrand":               "Charles Maurice de Talleyrand-Périgord",
 }
 
 
