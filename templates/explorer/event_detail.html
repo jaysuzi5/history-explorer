@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load markdownify explorer_tags %}
+{% load explorer_tags %}
 {% block title %}{{ event.name }} — {{ era.name }} — History Explorer{% endblock %}
 {% block meta_description %}{{ event.summary|truncatewords:25 }}{% endblock %}
 

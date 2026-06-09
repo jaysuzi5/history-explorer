@@ -17,6 +17,10 @@ DB_PASS=$(kubectl get secret unscripted-living -n unscripted-living \
 echo "==> Generating Django secret key..."
 DJANGO_SECRET=$(python3 -c "import secrets; print(secrets.token_urlsafe(50))")
 
+echo "==> Enter your Anthropic API key (leave blank to skip AI seeding):"
+read -rs ANTHROPIC_API_KEY
+echo ""
+
 echo "==> Creating namespace ${NAMESPACE}..."
 kubectl apply -f k8s/deployment.yaml --dry-run=client -o yaml \
   | kubectl apply -f - 2>/dev/null || true
@@ -48,6 +52,7 @@ kubectl create secret generic "$SECRET_NAME" \
   --from-literal=secret_key="$DJANGO_SECRET" \
   --from-literal=username="$DB_USER" \
   --from-literal=password="$DB_PASS" \
+  ${ANTHROPIC_API_KEY:+--from-literal=anthropic_api_key="$ANTHROPIC_API_KEY"} \
   --dry-run=client -o yaml | kubectl apply -f -
 
 echo "==> Applying deployment..."

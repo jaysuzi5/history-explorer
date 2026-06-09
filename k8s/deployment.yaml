@@ -3,6 +3,19 @@ kind: Namespace
 metadata:
   name: history-explorer
 ---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: history-explorer-media
+  namespace: history-explorer
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: nfs-client
+  resources:
+    requests:
+      storage: 5Gi
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -20,6 +33,10 @@ spec:
       labels:
         app: history-explorer
     spec:
+      volumes:
+        - name: media
+          persistentVolumeClaim:
+            claimName: history-explorer-media
       initContainers:
         - name: migrate
           image: jaysuzi5/history-explorer:latest
@@ -55,6 +72,9 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 8000
+          volumeMounts:
+            - name: media
+              mountPath: /app/media
           readinessProbe:
             httpGet:
               path: /
@@ -97,6 +117,36 @@ spec:
                 secretKeyRef:
                   name: history-explorer
                   key: password
+            - name: ANTHROPIC_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: history-explorer
+                  key: anthropic_api_key
+                  optional: true
+            - name: AWS_STORAGE_BUCKET_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: history-explorer
+                  key: aws_bucket
+                  optional: true
+            - name: AWS_S3_REGION_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: history-explorer
+                  key: aws_region
+                  optional: true
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: history-explorer
+                  key: aws_access_key_id
+                  optional: true
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: history-explorer
+                  key: aws_secret_access_key
+                  optional: true
 ---
 apiVersion: v1
 kind: Service

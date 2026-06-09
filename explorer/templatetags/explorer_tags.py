@@ -1,8 +1,18 @@
 import re
+import markdown as md
 from django import template
 from django.utils.safestring import mark_safe
 
 register = template.Library()
+
+_MD_EXTENSIONS = ['fenced_code', 'tables', 'nl2br', 'toc']
+
+
+@register.filter
+def markdownify(value):
+    if not value:
+        return mark_safe('')
+    return mark_safe(md.markdown(str(value), extensions=_MD_EXTENSIONS))
 
 
 @register.filter

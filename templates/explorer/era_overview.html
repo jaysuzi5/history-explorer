@@ -132,8 +132,8 @@
 </section>
 
 <!-- Graph + timeline data -->
-<script id="graph-data" type="application/json">{{ graph_json }}</script>
-<script id="timeline-data" type="application/json">{{ timeline_json }}</script>
+<script id="graph-data" type="application/json">{{ graph_json|safe }}</script>
+<script id="timeline-data" type="application/json">{{ timeline_json|safe }}</script>
 
 {% endblock %}
 

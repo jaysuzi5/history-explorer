@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load markdownify explorer_tags %}
+{% load explorer_tags %}
 {% block title %}{{ person.name }} — {{ era.name }} — History Explorer{% endblock %}
 {% block meta_description %}{{ person.summary|truncatewords:25 }}{% endblock %}
 
@@ -99,7 +99,7 @@
   </div>
 </div>
 
-<script id="graph-data" type="application/json">{{ graph_json }}</script>
+<script id="graph-data" type="application/json">{{ graph_json|safe }}</script>
 {% endblock %}
 
 {% block extra_js %}

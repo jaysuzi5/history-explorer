@@ -375,6 +375,7 @@ a:hover {
 .entity-card .card-img {
   height: 140px;
   object-fit: cover;
+  object-position: top center;
   width: 100%;
   display: block;
 }
