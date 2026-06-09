@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+{% load markdownify explorer_tags %}
+{% block title %}{{ person.name }} — {{ era.name }} — History Explorer{% endblock %}
+{% block meta_description %}{{ person.summary|truncatewords:25 }}{% endblock %}
+
+{% block content %}
+
+<div class="container pt-4">
+  {% include "explorer/_breadcrumb.html" %}
+
+  <div class="row mt-3 g-4">
+
+    <!-- Left column: portrait + quick facts -->
+    <div class="col-lg-3">
+      {% if person.featured_image %}
+      <img src="{{ person.featured_image.url }}" alt="{{ person.name }}" class="entity-portrait w-100 mb-3">
+      {% else %}
+      <div class="entity-portrait-placeholder mb-3">
+        <i class="bi bi-person" style="font-size: 4rem; color: var(--he-border)"></i>
+      </div>
+      {% endif %}
+
+      <div class="quick-facts">
+        <h6 class="section-header fs-6">Quick Facts</h6>
+        <dl class="mb-0">
+          {% if person.birth_year %}
+          <dt>Born</dt>
+          <dd>{{ person.birth_year }}</dd>
+          {% endif %}
+          {% if person.death_year %}
+          <dt>Died</dt>
+          <dd>{{ person.death_year }}</dd>
+          {% endif %}
+          {% if person.reign_start %}
+          <dt>Reign</dt>
+          <dd>{{ person.reign_start }}{% if person.reign_end %}–{{ person.reign_end }}{% endif %}</dd>
+          {% endif %}
+          {% if person.nationality %}
+          <dt>Nationality</dt>
+          <dd>{{ person.nationality }}</dd>
+          {% endif %}
+          <dt>Era</dt>
+          <dd><a href="{{ era.get_absolute_url }}">{{ era.name }}</a></dd>
+          {% if person.period %}
+          <dt>Period</dt>
+          <dd><a href="{{ person.period.get_absolute_url }}">{{ person.period.name }}</a></dd>
+          {% endif %}
+        </dl>
+      </div>
+
+      <a href="{{ era.get_absolute_url }}" class="btn btn-outline-secondary btn-sm w-100 mt-3">
+        <i class="bi bi-arrow-left me-1"></i>Back to {{ era.name }}
+      </a>
+    </div>
+
+    <!-- Right column: detail -->
+    <div class="col-lg-9">
+      <h1 class="entity-name">{{ person.name }}</h1>
+      {% if person.title %}<p class="entity-title">{{ person.title }}</p>{% endif %}
+      {% if person.summary %}<p class="entity-summary lead">{{ person.summary }}</p>{% endif %}
+
+      {% if person.body %}
+      <div class="entity-body mt-3">
+        {{ person.body|markdownify|resolve_links }}
+      </div>
+      {% endif %}
+
+      <!-- Relationships -->
+      {% if relationships %}
+      <section class="mt-5">
+        <h3 class="section-header">Connections</h3>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <h6 class="text-muted mb-2 small text-uppercase">List View</h6>
+            {% for item in relationships %}
+            <div class="rel-card">
+              <span class="rel-type-badge">{{ item.rel.get_relationship_type_display }}</span>
+              <div class="flex-grow-1">
+                <a href="{{ item.other.get_absolute_url }}" class="text-decoration-none" style="color: var(--he-gold)">
+                  {{ item.other.name }}
+                </a>
+                {% if item.rel.description %}
+                <p class="text-muted small mb-0 mt-1">{{ item.rel.description }}</p>
+                {% endif %}
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+          <div class="col-lg-6">
+            <h6 class="text-muted mb-2 small text-uppercase">Graph View</h6>
+            <div class="graph-container graph-container--small">
+              <div id="cy"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<script id="graph-data" type="application/json">{{ graph_json }}</script>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/cytoscape@3.30.2/dist/cytoscape.min.js"></script>
+<script>
+(function () {
+  const graphData = JSON.parse(document.getElementById('graph-data').textContent);
+  if (!graphData.nodes.length) return;
+
+  const cy = cytoscape({
+    container: document.getElementById('cy'),
+    elements: [...graphData.nodes, ...graphData.edges],
+    style: [
+      {
+        selector: 'node[type="person"]',
+        style: {
+          'background-color': '#c9a84c', 'border-color': '#8a6a1e', 'border-width': 2,
+          'label': 'data(label)', 'font-size': '10px', 'color': '#f0e6c8',
+          'width': 'mapData(importance, 1, 10, 24, 60)',
+          'height': 'mapData(importance, 1, 10, 24, 60)',
+          'text-valign': 'bottom', 'text-margin-y': 3, 'text-wrap': 'wrap', 'text-max-width': '70px',
+        },
+      },
+      {
+        selector: 'node[type="event"]',
+        style: {
+          'background-color': '#8b1a1a', 'border-color': '#5a0f0f',
+          'shape': 'diamond', 'label': 'data(label)', 'font-size': '9px', 'color': '#f0e6c8',
+          'width': 'mapData(importance, 1, 10, 20, 50)',
+          'height': 'mapData(importance, 1, 10, 20, 50)',
+          'text-valign': 'bottom', 'text-margin-y': 3, 'text-wrap': 'wrap', 'text-max-width': '70px',
+        },
+      },
+      {
+        selector: 'node[isCentral]',
+        style: { 'border-width': 4, 'border-color': '#ffffff' },
+      },
+      {
+        selector: 'edge',
+        style: {
+          'width': 'mapData(strength, 1, 5, 1, 3)',
+          'line-color': '#444', 'target-arrow-shape': 'triangle', 'target-arrow-color': '#444',
+          'curve-style': 'bezier', 'label': 'data(label)', 'font-size': '8px', 'color': '#888',
+          'text-background-color': '#0f0f1a', 'text-background-opacity': 0.8,
+          'text-background-padding': '2px',
+        },
+      },
+    ],
+    layout: { name: 'concentric', animate: false, concentric: n => n.data('isCentral') ? 10 : 1, levelWidth: () => 1 },
+  });
+
+  cy.on('tap', 'node', evt => {
+    const url = evt.target.data('url');
+    if (url) window.location.href = url;
+  });
+}());
+</script>
+{% endblock %}

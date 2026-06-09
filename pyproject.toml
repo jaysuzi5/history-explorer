@@ -1,0 +1,17 @@
+[project]
+name = "history-explorer"
+version = "0.1.0"
+description = "Interactive web application for exploring historical periods, figures, and events"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "django>=6.0",
+    "django-environ>=0.12.0",
+    "django-markdownx>=4.0.9",
+    "django-storages[s3]>=1.14.6",
+    "gunicorn>=20.1",
+    "markdown>=3.7",
+    "pillow>=12.1.0",
+    "psycopg2-binary>=2.9.11",
+    "whitenoise>=6.11.0",
+]

@@ -1,0 +1,265 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ era.name }} — History Explorer{% endblock %}
+{% block meta_description %}{{ era.tagline }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-timeline@7.7.3/styles/vis-timeline-graph2d.min.css">
+{% endblock %}
+
+{% block content %}
+
+<!-- Hero banner -->
+<section class="era-hero{% if era.featured_image %} era-hero--image{% endif %}"
+         {% if era.featured_image %}style="background-image: url('{{ era.featured_image.url }}')"{% endif %}>
+  <div class="hero-overlay"></div>
+  <div class="hero-content container">
+    {% include "explorer/_breadcrumb.html" %}
+    <h1 class="era-title mt-2">{{ era.name }}</h1>
+    <p class="era-dates-range text-muted mb-0">
+      {{ era.start_year }}{% if era.end_year %} – {{ era.end_year }}{% endif %}
+    </p>
+  </div>
+</section>
+
+<!-- Summary -->
+<div class="container mt-4">
+  <p class="era-summary-text lead">{{ era.summary }}</p>
+</div>
+
+<!-- Sub-periods -->
+{% if periods %}
+<section class="container mt-3 mb-4">
+  <h3 class="section-header">Periods</h3>
+  <div class="d-flex flex-wrap gap-2">
+    {% for period in periods %}
+    <a href="{{ period.get_absolute_url }}" class="btn btn-outline-secondary btn-sm period-pill">
+      {{ period.name }}
+      <span class="text-muted ms-1 small">{{ period.start_year }}–{% if period.end_year %}{{ period.end_year }}{% else %}…{% endif %}</span>
+    </a>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<!-- Timeline -->
+<section class="container mt-4">
+  <h3 class="section-header">Timeline</h3>
+  <div class="timeline-container">
+    <div id="timeline"></div>
+  </div>
+</section>
+
+<!-- Key Figures + Key Events grids -->
+<section class="container mt-5">
+  <div class="row g-5">
+    {% if people %}
+    <div class="col-lg-6">
+      <h3 class="section-header">Key Figures</h3>
+      <div class="row g-3">
+        {% for person in people %}
+        <div class="col-sm-6">
+          <a href="{{ person.get_absolute_url }}" class="entity-card">
+            {% if person.featured_image %}
+            <img src="{{ person.featured_image.url }}" alt="{{ person.name }}" class="card-img">
+            {% else %}
+            <div class="card-img-placeholder"><i class="bi bi-person"></i></div>
+            {% endif %}
+            <div class="card-body">
+              <h5 class="card-title">{{ person.name }}</h5>
+              {% if person.title %}<p class="card-subtitle">{{ person.title }}</p>{% endif %}
+              {% if person.reign_start %}
+              <p class="card-subtitle">
+                r. {{ person.reign_start }}{% if person.reign_end %}–{{ person.reign_end }}{% endif %}
+              </p>
+              {% endif %}
+              <p class="card-text">{{ person.summary|truncatewords:20 }}</p>
+            </div>
+          </a>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    {% if events %}
+    <div class="col-lg-6">
+      <h3 class="section-header">Key Events</h3>
+      <div class="row g-3">
+        {% for event in events %}
+        <div class="col-sm-6">
+          <a href="{{ event.get_absolute_url }}" class="entity-card">
+            {% if event.featured_image %}
+            <img src="{{ event.featured_image.url }}" alt="{{ event.name }}" class="card-img">
+            {% else %}
+            <div class="card-img-placeholder">
+              <i class="bi bi-{% if event.event_type == 'battle' %}sword{% elif event.event_type == 'revolution' %}fire{% elif event.event_type == 'treaty' %}file-text{% else %}calendar-event{% endif %}"></i>
+            </div>
+            {% endif %}
+            <div class="card-body">
+              <h5 class="card-title">{{ event.name }}</h5>
+              <p class="card-subtitle">
+                {{ event.year }}{% if event.end_year %}–{{ event.end_year }}{% endif %}
+                &middot; {{ event.get_event_type_display }}
+              </p>
+              <p class="card-text">{{ event.summary|truncatewords:20 }}</p>
+            </div>
+          </a>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<!-- Relationship graph -->
+<section class="container mt-5 mb-5">
+  <h3 class="section-header">Relationship Web</h3>
+  <div class="graph-container">
+    <div id="cy"></div>
+  </div>
+  <p class="text-muted small mt-2 text-center">
+    <i class="bi bi-info-circle me-1"></i>Click any node to explore that entity.
+    Drag to pan, scroll to zoom.
+  </p>
+  <!-- Screen-reader fallback -->
+  <ul class="visually-hidden" aria-label="Entities in relationship graph">
+    {% for person in people %}<li>{{ person.name }} (person)</li>{% endfor %}
+    {% for event in events %}<li>{{ event.name }} (event)</li>{% endfor %}
+    {% for period in periods %}<li>{{ period.name }} (period)</li>{% endfor %}
+  </ul>
+</section>
+
+<!-- Graph + timeline data -->
+<script id="graph-data" type="application/json">{{ graph_json }}</script>
+<script id="timeline-data" type="application/json">{{ timeline_json }}</script>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/cytoscape@3.30.2/dist/cytoscape.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vis-timeline@7.7.3/standalone/umd/vis-timeline-graph2d.min.js"></script>
+<script>
+(function () {
+  // ── vis-timeline ──────────────────────────────────────────────────────────
+  const tlData = JSON.parse(document.getElementById('timeline-data').textContent);
+  const tlContainer = document.getElementById('timeline');
+
+  if (tlContainer && tlData.items.length > 0) {
+    const items = new vis.DataSet(tlData.items);
+    const groups = new vis.DataSet(tlData.groups);
+    const timeline = new vis.Timeline(tlContainer, items, groups, {
+      stack: true,
+      orientation: { axis: 'top' },
+      tooltip: { followMouse: true },
+      zoomMin: 1000 * 60 * 60 * 24 * 365 * 5,
+      zoomMax: 1000 * 60 * 60 * 24 * 365 * 400,
+    });
+    timeline.on('select', function (props) {
+      if (!props.items.length) return;
+      const item = items.get(props.items[0]);
+      if (item && item.url) window.location.href = item.url;
+    });
+  }
+
+  // ── Cytoscape graph ───────────────────────────────────────────────────────
+  const graphData = JSON.parse(document.getElementById('graph-data').textContent);
+  if (!graphData.nodes.length) return;
+
+  const cy = cytoscape({
+    container: document.getElementById('cy'),
+    elements: [...graphData.nodes, ...graphData.edges],
+    style: [
+      {
+        selector: 'node[type="person"]',
+        style: {
+          'background-color': '#c9a84c',
+          'border-color': '#8a6a1e',
+          'border-width': 2,
+          'label': 'data(label)',
+          'font-size': '11px',
+          'color': '#f0e6c8',
+          'width': 'mapData(importance, 1, 10, 28, 72)',
+          'height': 'mapData(importance, 1, 10, 28, 72)',
+          'text-valign': 'bottom',
+          'text-margin-y': 4,
+          'text-wrap': 'wrap',
+          'text-max-width': '80px',
+          'font-family': 'Cinzel, serif',
+        },
+      },
+      {
+        selector: 'node[type="event"]',
+        style: {
+          'background-color': '#8b1a1a',
+          'border-color': '#5a0f0f',
+          'border-width': 2,
+          'shape': 'diamond',
+          'label': 'data(label)',
+          'font-size': '10px',
+          'color': '#f0e6c8',
+          'width': 'mapData(importance, 1, 10, 24, 56)',
+          'height': 'mapData(importance, 1, 10, 24, 56)',
+          'text-valign': 'bottom',
+          'text-margin-y': 4,
+          'text-wrap': 'wrap',
+          'text-max-width': '80px',
+        },
+      },
+      {
+        selector: 'node[type="period"]',
+        style: {
+          'background-color': '#1a3a6b',
+          'border-color': '#0d2040',
+          'shape': 'roundrectangle',
+          'label': 'data(label)',
+          'font-size': '11px',
+          'color': '#f0e6c8',
+          'width': 120,
+          'height': 40,
+          'text-valign': 'center',
+        },
+      },
+      {
+        selector: 'node:selected',
+        style: { 'border-width': 3, 'border-color': '#ffffff' },
+      },
+      {
+        selector: 'edge',
+        style: {
+          'width': 'mapData(strength, 1, 5, 1, 4)',
+          'line-color': '#444',
+          'target-arrow-shape': 'triangle',
+          'target-arrow-color': '#444',
+          'curve-style': 'bezier',
+          'label': 'data(label)',
+          'font-size': '9px',
+          'color': '#888',
+          'text-background-color': '#0f0f1a',
+          'text-background-opacity': 0.8,
+          'text-background-padding': '2px',
+        },
+      },
+    ],
+    layout: {
+      name: 'cose',
+      animate: true,
+      randomize: true,
+      nodeRepulsion: 8000,
+      idealEdgeLength: 100,
+    },
+  });
+
+  cy.on('tap', 'node', function (evt) {
+    const url = evt.target.data('url');
+    if (url) window.location.href = url;
+  });
+
+  cy.on('tap', 'edge', function (evt) {
+    const url = evt.target.data('url');
+    if (url) window.location.href = url;
+  });
+}());
+</script>
+{% endblock %}
