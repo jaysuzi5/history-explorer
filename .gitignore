@@ -33,5 +33,3 @@ db.sqlite3
 .coverage
 htmlcov/
 
-# UV
-uv.lock

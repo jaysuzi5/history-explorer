@@ -5,7 +5,9 @@ import environ
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 env = environ.Env()
-environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+_env_file = os.path.join(BASE_DIR, '.env')
+if os.path.exists(_env_file):
+    environ.Env.read_env(_env_file)
 
 SECRET_KEY = env('SECRET_KEY', default='django-insecure-change-this-in-production-please')
 DEBUG = env.bool('DEBUG', default=False)
